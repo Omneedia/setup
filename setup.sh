@@ -30,7 +30,10 @@ NETWORK_INTERFACE=eth0
 CONVOY_URI="https://github.com/rancher/convoy/releases/download/v0.5.2/convoy.tar.gz"
 KEY=${KEY:-0mneediaRulez!}
 DATASTORE=${DATASTORE:-/datastore}
-INSTANCE=prod
+INSTANCE=${DATASTORE:-prod}
+URI_REGISTRY=${URI_REGISTRY:-registry}
+URI_API=${URI_API:-manager}
+URI_CONSOLE=${URI_CONSOLE:-manager}
 
 mkdir -p $DATASTORE
 
@@ -287,21 +290,21 @@ if [ "$TYPE" == "standalone" ]; then
   mkdir -p $ROOT/.snapshots  
 
   printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
-  
-  printf 'version: 1.0.0' > $ROOT/.omneedia-ci/api/settings.yml
 
-  printf '\ntokens:' >> $ROOT/.omneedia-ci/api/settings.yml
-  printf '\n  manager: '`docker swarm join-token manager -q` >> $ROOT/.omneedia-ci/api/settings.yml
-  printf '\n  worker: '`docker swarm join-token worker -q` >> $ROOT/.omneedia-ci/api/settings.yml
-  printf '\ndirectories: ' >> $ROOT/.omneedia-ci/api/settings.yml
-  printf '\n  nginx: '$DATASTORE'/omneedia-core-web-'$INSTANCE'_etc' >> $ROOT/.omneedia-ci/api/settings.yml
-  printf '\n  certs: '$DATASTORE'/omneedia-core-web-'$INSTANCE'_certs' >> $ROOT/.omneedia-ci/api/settings.yml
-  printf '\n  logs: '$DATASTORE'/omneedia-core-web-'$INSTANCE'_logs' >> $ROOT/.omneedia-ci/api/settings.yml  
+  printf 'OMNEEDIA_API_VERSION=1.0.0' > $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_TOKEN_MANAGER='`docker swarm join-token manager -q` >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_TOKEN_WORKER='`docker swarm join-token worker -q` >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_MANAGER_INTERFACE='${NETWORK_INTERFACE} >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_ROOT_NGINX='$DATASTORE'/omneedia-core-web-'$INSTANCE'_etc' >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_ROOT_CERTS='$DATASTORE'/omneedia-core-web-'$INSTANCE'_certs' >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_ROOT_LOGS='$DATASTORE'/omneedia-core-web-'$INSTANCE'_logs' >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_URI_REGISTRY='${URI_REGISTRY} >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_URI_API='${URI_API} >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_URI_CONSOLE='${URI_CONSOLE} >> $ROOT/.omneedia-ci/api/.env
+
   if ! [ -z "$PROXY" ]
   then
-    printf '\nproxy: '$PROXY >> $ROOT/.omneedia-ci/api/settings.yml
-    printf '\nenv: ' >> $ROOT/.omneedia-ci/api/settings.yml
-    printf '\n  PROXY: '$PROXY >> $ROOT/.omneedia-ci/api/settings.yml
+    printf '\nOMNEEDIA_PROXY='$PROXY >> $ROOT/.omneedia-ci/api/.env
   fi
 
   # activate convoy plugin
@@ -309,7 +312,7 @@ if [ "$TYPE" == "standalone" ]; then
   convoy delete vol1
 
   # install Omneedia manager
-  npm install -g oam@1.0.14
+  npm install -g oam@1.0.15
   clear
   oam config set datastore $DATASTORE
   oam config set certs $DATASTORE/omneedia-core-web-${INSTANCE}_certs
