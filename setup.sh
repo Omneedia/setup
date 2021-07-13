@@ -312,7 +312,7 @@ if [ "$TYPE" == "standalone" ]; then
   convoy delete vol1
 
   # install Omneedia manager
-  npm install -g oam@1.0.15
+  npm install -g oam@1.0.16
   clear
   oam config set datastore $DATASTORE
   oam config set certs $DATASTORE/omneedia-core-web-${INSTANCE}_certs
