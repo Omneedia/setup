@@ -30,7 +30,7 @@ NETWORK_INTERFACE=eth0
 CONVOY_URI="https://github.com/rancher/convoy/releases/download/v0.5.2/convoy.tar.gz"
 KEY=${KEY:-0mneediaRulez!}
 DATASTORE=${DATASTORE:-/datastore}
-INSTANCE=${DATASTORE:-prod}
+INSTANCE=${INSTANCE:-prod}
 URI_REGISTRY=${URI_REGISTRY:-registry}
 URI_API=${URI_API:-manager}
 URI_CONSOLE=${URI_CONSOLE:-console}
@@ -312,7 +312,7 @@ if [ "$TYPE" == "standalone" ]; then
   convoy delete vol1
 
   # install Omneedia manager
-  npm install -g oam@1.0.18
+  npm install -g oam@1.0.19
   clear
   oam config set datastore $DATASTORE
   oam config set certs $DATASTORE/omneedia-core-web-${INSTANCE}_certs
