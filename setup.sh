@@ -321,6 +321,7 @@ if [ "$TYPE" == "standalone" ]; then
   oam install omneedia-core-web
   oam install omneedia-core-certbot
   oam setup
+  wait
   oam install omneedia-core-registry
   
 fi
