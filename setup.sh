@@ -318,8 +318,10 @@ if [ "$TYPE" == "standalone" ]; then
   oam config set datastore $DATASTORE
   oam config set certs $DATASTORE/omneedia-core-web-${INSTANCE}_certs
   oam config set nginx $DATASTORE/omneedia-core-web-${INSTANCE}_etc
+  clear
   oam install omneedia-core-web
   oam install omneedia-core-certbot
+  exec < /dev/tty;
   oam setup
   
 fi
