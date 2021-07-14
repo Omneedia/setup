@@ -33,7 +33,7 @@ DATASTORE=${DATASTORE:-/datastore}
 INSTANCE=${DATASTORE:-prod}
 URI_REGISTRY=${URI_REGISTRY:-registry}
 URI_API=${URI_API:-manager}
-URI_CONSOLE=${URI_CONSOLE:-manager}
+URI_CONSOLE=${URI_CONSOLE:-console}
 
 mkdir -p $DATASTORE
 
@@ -312,7 +312,7 @@ if [ "$TYPE" == "standalone" ]; then
   convoy delete vol1
 
   # install Omneedia manager
-  npm install -g oam@1.0.17
+  npm install -g oam@1.0.18
   clear
   oam config set datastore $DATASTORE
   oam config set certs $DATASTORE/omneedia-core-web-${INSTANCE}_certs
