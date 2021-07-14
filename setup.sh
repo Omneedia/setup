@@ -295,6 +295,7 @@ if [ "$TYPE" == "standalone" ]; then
   printf '\nOMNEEDIA_TOKEN_MANAGER='`docker swarm join-token manager -q` >> $ROOT/.omneedia-ci/api/.env
   printf '\nOMNEEDIA_TOKEN_WORKER='`docker swarm join-token worker -q` >> $ROOT/.omneedia-ci/api/.env
   printf '\nOMNEEDIA_MANAGER_INTERFACE='${NETWORK_INTERFACE} >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_ROOT_CONFIG='${DATASTORE}'/.omneedia-ci' >> $ROOT/.omneedia-ci/api/.env
   printf '\nOMNEEDIA_ROOT_NGINX='${DATASTORE}'/omneedia-core-web-'${INSTANCE}'_etc' >> $ROOT/.omneedia-ci/api/.env
   printf '\nOMNEEDIA_ROOT_CERTS='${DATASTORE}'/omneedia-core-web-'${INSTANCE}'_certs' >> $ROOT/.omneedia-ci/api/.env
   printf '\nOMNEEDIA_ROOT_LOGS='${DATASTORE}'/omneedia-core-web-'${INSTANCE}'_logs' >> $ROOT/.omneedia-ci/api/.env
