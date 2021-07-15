@@ -321,7 +321,8 @@ if [ "$TYPE" == "standalone" ]; then
   clear
   oam install omneedia-core-web
   oam install omneedia-core-certbot
-  exec < /dev/tty;
-  oam setup
+  clear
+  echo "Please type oam setup to finish the installation process."
+  echo " "
   
 fi
