@@ -311,7 +311,7 @@ if [ "$TYPE" == "standalone" ]; then
   convoy delete vol1
 
   # install Omneedia manager
-  npm install -g oam@1.0.21
+  npm install -g oam@1.0.22
   clear
   oam config set datastore $DATASTORE
   clear
