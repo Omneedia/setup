@@ -291,6 +291,16 @@ if [ "$TYPE" == "standalone" ]; then
 
   printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
 
+  printf 'OMNEEDIA_API_VERSION=1.0.0' > $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_TOKEN_MANAGER='`docker swarm join-token manager -q` >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_TOKEN_WORKER='`docker swarm join-token worker -q` >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_MANAGER_INTERFACE='${NETWORK_INTERFACE} >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_ROOT_CONFIG='${DATASTORE}'/.omneedia-ci' >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_INSTANCE='${INSTANCE} >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_URI_REGISTRY='${URI_REGISTRY} >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_URI_API='${URI_API} >> $ROOT/.omneedia-ci/api/.env
+  printf '\nOMNEEDIA_URI_CONSOLE='${URI_CONSOLE} >> $ROOT/.omneedia-ci/api/.env
+
   if ! [ -z "$PROXY" ]
   then
     printf '\nOMNEEDIA_PROXY='$PROXY >> $ROOT/.omneedia-ci/api/.env
