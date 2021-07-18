@@ -291,18 +291,6 @@ if [ "$TYPE" == "standalone" ]; then
 
   printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
 
-  printf 'OMNEEDIA_API_VERSION=1.0.0' > $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_TOKEN_MANAGER='`docker swarm join-token manager -q` >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_TOKEN_WORKER='`docker swarm join-token worker -q` >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_MANAGER_INTERFACE='${NETWORK_INTERFACE} >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_ROOT_CONFIG='${DATASTORE}'/.omneedia-ci' >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_ROOT_NGINX='${DATASTORE}'/omneedia-core-web-'${INSTANCE}'_etc' >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_ROOT_CERTS='${DATASTORE}'/omneedia-core-web-'${INSTANCE}'_certs' >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_ROOT_LOGS='${DATASTORE}'/omneedia-core-web-'${INSTANCE}'_logs' >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_URI_REGISTRY='${URI_REGISTRY} >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_URI_API='${URI_API} >> $ROOT/.omneedia-ci/api/.env
-  printf '\nOMNEEDIA_URI_CONSOLE='${URI_CONSOLE} >> $ROOT/.omneedia-ci/api/.env
-
   if ! [ -z "$PROXY" ]
   then
     printf '\nOMNEEDIA_PROXY='$PROXY >> $ROOT/.omneedia-ci/api/.env
@@ -316,12 +304,9 @@ if [ "$TYPE" == "standalone" ]; then
   npm install -g oam@1.0.20
   clear
   oam config set datastore $DATASTORE
-  oam config set certs $DATASTORE/omneedia-core-web-${INSTANCE}_certs
-  oam config set nginx $DATASTORE/omneedia-core-web-${INSTANCE}_etc
   clear
   oam install omneedia-core-web
-  oam install omneedia-core-certbot
-  clear
+  echo " "
   echo "Please type oam setup to finish the installation process."
   echo " "
   
