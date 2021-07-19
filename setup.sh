@@ -291,6 +291,7 @@ if [ "$TYPE" == "standalone" ]; then
 
   printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
   printf '\nINSTANCE='$INSTANCE >> "/etc/default/omneedia"  
+  printf '\nINTERFACE='${NETWORK_INTERFACE} >> "/etc/default/omneedia"  
 
   if ! [ -z "$PROXY" ]
   then
