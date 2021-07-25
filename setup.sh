@@ -288,6 +288,8 @@ if [ "$TYPE" == "standalone" ]; then
   mkdir -p $ROOT/.omneedia-ci/api
   mkdir -p $ROOT/.omneedia-ci/certs  
   mkdir -p $ROOT/.snapshots  
+  
+  printf "" > "/etc/ansible/hosts"
 
   printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
   printf '\nINSTANCE='$INSTANCE >> "/etc/default/omneedia"  
