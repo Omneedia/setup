@@ -129,7 +129,7 @@ if [ "$TYPE" == "standalone" ]; then
   systemctl restart nfs-kernel-server
   
   grep -q 'omneedia-datastore-standalone' /etc/exports || 
-  printf '# omneedia-datastore-standalone\n'$ROOT' 127.0.0.1(rw,sync,no_subtree_check,no_root_squash)' >> /etc/exports  
+  printf '# omneedia-datastore-standalone\n'$ROOT' 127.0.0.1(rw,sync,no_subtree_check,no_root_squash)' > /etc/exports  
   exportfs -ra
 
   grep -q 'omneedia-datastore' /etc/fstab || 
