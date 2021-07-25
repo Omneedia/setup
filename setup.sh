@@ -87,7 +87,7 @@ then
 fi
 
 mkdir -p /root/.ssh
-ssh-keygen -t rsa -N "$KEY" -C "omneedia-key" -f /root/.ssh/id_rsa
+ssh-keygen -t rsa -N "" -C "omneedia-key" -f /root/.ssh/id_rsa
 
 if ! [ -z "$PROXY" ]
 then
