@@ -54,11 +54,7 @@ for i in "$@"; do
       PROXY="${i#*=}"
       shift # past argument=value
       ;;
-    -w=*|--worker=*)
-      TYPE="worker"
-      shift # past argument=value
-      ;;
-    -r=*|--master=*)
+    -w=*|--worker)
       TYPE="worker"
       shift # past argument=value
       ;;
@@ -70,6 +66,14 @@ for i in "$@"; do
       ROOT="${i#*=}"
       shift # past argument=value
       ;;
+    -s=*|--datastore=*)
+      DATASTORE="${i#*=}"
+      shift # past argument=value
+      ;;   
+    -t=*|--token=*)
+      TOKEN="${i#*=}"
+      shift # past argument=value
+      ;;          
     -n=*|--network=*)
       NETWORK_INTERFACE="${i#*=}"
       shift # past argument=value
@@ -86,7 +90,10 @@ then
   exit 1
 fi
 
+echo $TOKEN
+
 mkdir -p /root/.ssh
+touch /root/.ssh/authorized_keys
 ssh-keygen -t rsa -N "" -C "omneedia-key" -f /root/.ssh/id_rsa
 
 if ! [ -z "$PROXY" ]
@@ -96,13 +103,6 @@ then
   echo use_proxy=yes
   echo http_proxy=$PROXY >> ~/.wgetrc
   echo https_proxy=$PROXY >> ~/.wgetrc
-fi
-
-if [ "$TYPE" == "worker" ]; then
-   if [ -z "$MANAGER" ]; then
-       echo "You must provide a manager URI"
-       exit 1;
-   fi
 fi
 
 apt-get update
@@ -137,6 +137,20 @@ if [ "$TYPE" == "standalone" ]; then
   mount -a
 
 fi
+
+if [ "$TYPE" == "worker" ]; then
+   if [ -z "$MANAGER" ]; then
+       echo "You must provide a manager URI"
+       exit 1;
+   fi
+   grep -q 'omneedia' /root/.ssh/authorized_keys ||
+   printf '#omneedia\nssh-rsa '$MANAGER' omneedia-key' >> /root/.ssh/authorized_keys
+   grep -q 'omneedia-datastore' /etc/fstab || 
+   printf '# omneedia-datastore\n'$ROOT'    '$DATASTORE'    nfs    defaults    0 0\n' >> /etc/fstab  
+   mount -a
+   docker swarm join --token $TOKEN
+fi
+
 
 systemctl enable rpc-statd
 systemctl start rpc-statd
