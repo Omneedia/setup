@@ -319,7 +319,7 @@ if [ "$TYPE" == "standalone" ]; then
   convoy delete vol1
 
   # install Omneedia manager
-  npm install -g oam@1.0.22
+  npm install -g oam@1.0.24
   clear
   oam install omneedia-core-web
   echo " "
