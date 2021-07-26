@@ -108,7 +108,7 @@ fi
 apt-get update
 bash -c "$(wget -O - https://deb.nodesource.com/setup_14.x)"
 apt update
-apt-get --assume-yes install glances inotify-tools nodejs apt-transport-https ca-certificates curl git gnupg-agent software-properties-common nfs-common nfs-kernel-server
+apt-get --assume-yes install glances inotify-tools nodejs apt-transport-https ca-certificates curl git gnupg-agent software-properties-common nfs-common
 apt-get --assume-yes remove docker docker-engine docker.io containerd runc 
 wget -qO - https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 echo \
@@ -119,7 +119,9 @@ apt update
 apt --assume-yes install ansible docker-ce docker-ce-cli containerd.io
 
 if [ "$TYPE" == "standalone" ]; then
-
+  
+  apt-get --assume-yes install nfs-kernel-server
+  
   if [ -z "$ROOT" ]; then
     echo "You must provide a directory"
     exit 1;
@@ -319,7 +321,7 @@ if [ "$TYPE" == "standalone" ]; then
   convoy delete vol1
 
   # install Omneedia manager
-  npm install -g oam@1.0.24
+  npm install -g oam@1.0.25
   clear
   oam install omneedia-core-web
   echo " "
