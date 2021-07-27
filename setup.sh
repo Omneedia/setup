@@ -36,7 +36,7 @@ INSTANCE=${INSTANCE:-prod}
 URI_REGISTRY=${URI_REGISTRY:-registry}
 URI_API=${URI_API:-manager}
 URI_CONSOLE=${URI_CONSOLE:-console}
-UUID=${uuidgen}
+UUID=$(uuidgen)
 
 mkdir -p $DATASTORE
 
@@ -122,8 +122,7 @@ echo \
   "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-apt update
-apt --assume-yes install ansible docker-ce docker-ce-cli containerd.io
+
 
 if [ "$TYPE" == "standalone" ]; then
   
@@ -164,11 +163,14 @@ if [ "$TYPE" == "databank" ]; then
   exportfs -ra
   
   printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
-  printf 'ROOT='$ROOT >> "/etc/default/omneedia"
-  printf 'UUID='$UUID >> "/etc/default/omneedia"
+  printf '\nROOT='$ROOT >> "/etc/default/omneedia"
+  printf '\nUUID='$UUID >> "/etc/default/omneedia"
   
   exit
 fi
+
+apt update
+apt --assume-yes install ansible docker-ce docker-ce-cli containerd.io
 
 if [ "$TYPE" == "worker" ]; then
    if [ -z "$MANAGER" ]; then
