@@ -36,6 +36,7 @@ INSTANCE=${INSTANCE:-prod}
 URI_REGISTRY=${URI_REGISTRY:-registry}
 URI_API=${URI_API:-manager}
 URI_CONSOLE=${URI_CONSOLE:-console}
+UUID=${uuidgen}
 
 mkdir -p $DATASTORE
 
@@ -164,6 +165,7 @@ if [ "$TYPE" == "databank" ]; then
   
   printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
   printf 'ROOT='$ROOT >> "/etc/default/omneedia"
+  printf 'UUID='$UUID >> "/etc/default/omneedia"
   
   exit
 fi
