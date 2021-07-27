@@ -122,8 +122,6 @@ echo \
   "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
   $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-
-
 if [ "$TYPE" == "standalone" ]; then
   
   apt-get --assume-yes install nfs-kernel-server
@@ -165,6 +163,36 @@ if [ "$TYPE" == "databank" ]; then
   printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
   printf '\nROOT='$ROOT >> "/etc/default/omneedia"
   printf '\nUUID='$UUID >> "/etc/default/omneedia"
+
+  printf '[Unit]' > "/etc/systemd/system/nfs-api.service"
+  printf '\nDescription=My super nodejs app' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\n[Service]' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\nWorkingDirectory=/var/www/app' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\nExecStart=/usr/bin/node api.js' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\nRestart=always' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\nRestartSec=500ms' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\nStandardOutput=syslog' >> "/etc/systemd/system/nfs-api.service"
+  printf '\nStandardError=syslog' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\nSyslogIdentifier=nfs-api' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\nUser=root' >> "/etc/systemd/system/nfs-api.service"
+  printf '\nGroup=root' >> "/etc/systemd/system/nfs-api.service"
+
+  printf '\nEnvironment=NODE_ENV=production' >> "/etc/systemd/system/nfs-api.service"
+
+
+  printf '\n[Install]' >> "/etc/systemd/system/nfs-api.service"
+  printf '\nWantedBy=multi-user.target' >> "/etc/systemd/system/nfs-api.service"
+
+  systemctl enable nfs-api
+  service nfs-api start
   
   exit
 fi
