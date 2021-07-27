@@ -146,7 +146,7 @@ if [ "$TYPE" == "standalone" ]; then
 
 fi
 
-if [ "$TYPE" == "standalone" ]; then
+if [ "$TYPE" == "databank" ]; then
   
   apt-get --assume-yes install nfs-kernel-server
   
@@ -161,8 +161,11 @@ if [ "$TYPE" == "standalone" ]; then
   grep -q 'omneedia-databank' /etc/exports || 
   printf '# omneedia-databank\n'$ROOT' 127.0.0.1(rw,sync,no_subtree_check,no_root_squash)' > /etc/exports  
   exportfs -ra
-
-  exit 1
+  
+  printf 'DATASTORE='$DATASTORE > "/etc/default/omneedia"
+  printf 'ROOT='$ROOT >> "/etc/default/omneedia"
+  
+  exit
 fi
 
 if [ "$TYPE" == "worker" ]; then
