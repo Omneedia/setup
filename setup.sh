@@ -16,6 +16,8 @@
 #
 # samples:
 # --------
+# o datastore:
+#   ./setup.sh --databank --dir=/opt/store
 # o standalone:
 #   ./setup.sh --standalone --dir=/opt/store --network=eth0
 #   ./setup.sh --standalone --network=eth1 --dir=/opt/store
@@ -50,6 +52,10 @@ for i in "$@"; do
       TYPE="standalone"
       shift # past argument=value
       ;;
+    -b|--databank)
+      TYPE="databank"
+      shift # past argument=value
+      ;;      
     -p=*|--proxy=*)
       PROXY="${i#*=}"
       shift # past argument=value
@@ -86,7 +92,7 @@ done
 
 if [ -z "$TYPE" ]
 then
-  echo "You must provide one of the following : --standalone --worker --cluster --manager"
+  echo "You must provide one of the following : --databank --standalone --worker --cluster --manager"
   exit 1
 fi
 
@@ -138,6 +144,25 @@ if [ "$TYPE" == "standalone" ]; then
   printf '# omneedia-datastore\n127.0.0.1:'$ROOT'    '$DATASTORE'    nfs    defaults    0 0\n' >> /etc/fstab  
   mount -a
 
+fi
+
+if [ "$TYPE" == "standalone" ]; then
+  
+  apt-get --assume-yes install nfs-kernel-server
+  
+  if [ -z "$ROOT" ]; then
+    echo "You must provide a directory"
+    exit 1;
+  fi
+  mkdir -p $ROOT
+  chown -R nobody:nogroup $ROOT
+  systemctl restart nfs-kernel-server
+  
+  grep -q 'omneedia-databank' /etc/exports || 
+  printf '# omneedia-databank\n'$ROOT' 127.0.0.1(rw,sync,no_subtree_check,no_root_squash)' > /etc/exports  
+  exportfs -ra
+
+  exit 1
 fi
 
 if [ "$TYPE" == "worker" ]; then
