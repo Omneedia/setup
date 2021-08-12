@@ -353,7 +353,7 @@ service docker restart
 # create swarm cluster (standalone)
 if [ "$TYPE" == "standalone" ]; then
 
-  docker swarm init --advertise-addr $NETWORK_INTERFACE
+  docker swarm init
   
   # create networks
   docker network create --driver overlay public
